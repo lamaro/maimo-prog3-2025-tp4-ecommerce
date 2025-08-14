@@ -3,6 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
+    <header>
       <nav>
         <ul>
           <li>About</li>
@@ -11,6 +12,7 @@ export default function Home() {
         </ul>
       </nav>
       <div>HOLA MUNDO</div>
+      </header>
     </>
   );
 }
