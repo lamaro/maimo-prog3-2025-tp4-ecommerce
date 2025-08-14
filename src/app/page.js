@@ -6,6 +6,8 @@ export default function Home() {
       <nav>
         <ul>
           <li>About</li>
+          <li>Products</li>
+          <li>Contact</li>
         </ul>
       </nav>
       <div>HOLA MUNDO</div>
