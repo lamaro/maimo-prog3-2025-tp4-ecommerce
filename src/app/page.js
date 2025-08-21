@@ -14,6 +14,8 @@ export default function Home() {
           <li>Contact</li>
         </ul>
         <p>{cartQty()}</p>
+        <p>Este es mi logo</p>
+        <p>Robert</p>
       </nav>
       <div>HOLA MUNDO</div>
       </header>
