@@ -45,7 +45,7 @@ export default function Navbar() {
         </ul>
 
         <Link
-          href="/cart"
+          href="/checkout"
           className="inline-flex items-center gap-2 text-sm rounded-xl border border-zinc-200 dark:border-zinc-800 px-3 py-1.5 hover:border-zinc-300 dark:hover:border-zinc-700 transition"
         >
           <span className="i-lucide-shopping-cart" aria-hidden />

@@ -1,56 +1,70 @@
 "use client";
 
-import { useState, useEffect, useContext, createContext, useCallback } from "react";
-import axios from 'axios';
+import {
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+  useCallback,
+} from "react";
+import axios from "axios";
 const ShopContext = createContext();
 
 export const ShopContextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [products, setProducts] = useState([])
-  const [product, setProduct] = useState({})
+  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState({});
 
- const handleAddToCart = () => {
-    // setCart('')
- }
+  const handleAddToCart = (product) => {
+    let productToAdd = {};
+    const findProduct = cart.find(
+      (productInCart) => productInCart._id === product._id
+    );
+    if (findProduct) {
+      productToAdd = { ...findProduct, qty: findProduct.qty + product.qty };
+    } else {
+      productToAdd = product;
+    }
 
- const getAllProducts = useCallback(async () => {
-  try {
-    const res = await axios.get(`http://localhost:4000/products`)
-    console.log('products', res.data.products)
-    setProducts(res.data.products)
-  } catch (error) {
-    console.log(error)
-  }
- },[])
+    const filteredCart = cart.filter((productInCart)=>productInCart._id !== product._id)
+    setCart([...filteredCart, productToAdd]);
+  };
 
+  const getAllProducts = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:4000/products`);
+      console.log("products", res.data.products);
+      setProducts(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
- const getOneProduct = useCallback(async (id)=>{
-  try {
-    const res = await axios.get(`http://localhost:4000/products/${id}`)
-    console.log('product', res.data.product)
-    setProduct(res.data.product)
-  } catch (error) {
-    console.log(error)
-  }
- }, [])
+  const getOneProduct = useCallback(async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:4000/products/${id}`);
+      console.log("product", res.data.product);
+      setProduct(res.data.product);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
- useEffect(()=>{
-  getAllProducts()
- },[])
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
-
-
-
-  const cartQty = () => cart.length
+  const cartQty = () => cart.length;
 
   return (
     <ShopContext.Provider
       value={{
+        cart,
         handleAddToCart,
         cartQty,
         products,
         product,
-        getOneProduct
+        getOneProduct,
       }}
     >
       {children}
