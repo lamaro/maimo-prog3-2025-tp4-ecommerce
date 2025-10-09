@@ -1,26 +1,70 @@
 "use client";
 
-import { useState, useEffect, useContext, createContext } from "react";
+import {
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+  useCallback,
+} from "react";
+import axios from "axios";
 const ShopContext = createContext();
 
 export const ShopContextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState({});
 
-  useEffect(()=>{
-    console.log(cart)
-  },[cart])
+  const handleAddToCart = (product) => {
+    let productToAdd = {};
+    const findProduct = cart.find(
+      (productInCart) => productInCart._id === product._id
+    );
+    if (findProduct) {
+      productToAdd = { ...findProduct, qty: findProduct.qty + product.qty };
+    } else {
+      productToAdd = product;
+    }
 
- const handleAddToCart = () => {
-    // setCart('')
- }
+    const filteredCart = cart.filter((productInCart)=>productInCart._id !== product._id)
+    setCart([...filteredCart, productToAdd]);
+  };
 
-  const cartQty = () => cart.length
+  const getAllProducts = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:4000/products`);
+      console.log("products", res.data.products);
+      setProducts(res.data.products);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const getOneProduct = useCallback(async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:4000/products/${id}`);
+      console.log("product", res.data.product);
+      setProduct(res.data.product);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
+  const cartQty = () => cart.length;
 
   return (
     <ShopContext.Provider
       value={{
+        cart,
         handleAddToCart,
-        cartQty
+        cartQty,
+        products,
+        product,
+        getOneProduct,
       }}
     >
       {children}
