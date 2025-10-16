@@ -34,7 +34,7 @@ export const ShopContextProvider = ({ children }) => {
 
   const getAllProducts = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/products`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products`);
       setProducts(res.data.products);
     } catch (error) {
       console.log(error);
@@ -43,7 +43,7 @@ export const ShopContextProvider = ({ children }) => {
 
   const getOneProduct = useCallback(async (id) => {
     try {
-      const res = await axios.get(`http://localhost:4000/products/${id}`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
       setProduct(res.data.product);
     } catch (error) {
       console.log(error);
@@ -79,7 +79,7 @@ export const ShopContextProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        'http://localhost:4000/orders',
+        `${process.env.NEXT_PUBLIC_API_URL}/orders`,
         orderValues
       );
     
