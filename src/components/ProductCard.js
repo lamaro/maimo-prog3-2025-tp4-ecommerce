@@ -19,6 +19,7 @@ export default function ProductCard({ product }) {
         <h3 className="font-medium text-zinc-900 dark:text-zinc-100 line-clamp-1">
           {product.name}
         </h3>
+        <h4>Price: {product.price}</h4>
         {/* <p className="mt-1 text-zinc-600 dark:text-zinc-400">${product.price.toFixed(2)}</p> */}
 
         <div className="mt-4 flex gap-2">

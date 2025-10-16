@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   useState,
@@ -6,8 +6,8 @@ import {
   useContext,
   createContext,
   useCallback,
-} from "react";
-import axios from "axios";
+} from 'react';
+import axios from 'axios';
 const ShopContext = createContext();
 
 export const ShopContextProvider = ({ children }) => {
@@ -26,14 +26,15 @@ export const ShopContextProvider = ({ children }) => {
       productToAdd = product;
     }
 
-    const filteredCart = cart.filter((productInCart)=>productInCart._id !== product._id)
+    const filteredCart = cart.filter(
+      (productInCart) => productInCart._id !== product._id
+    );
     setCart([...filteredCart, productToAdd]);
   };
 
   const getAllProducts = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/products`);
-      console.log("products", res.data.products);
       setProducts(res.data.products);
     } catch (error) {
       console.log(error);
@@ -43,7 +44,6 @@ export const ShopContextProvider = ({ children }) => {
   const getOneProduct = useCallback(async (id) => {
     try {
       const res = await axios.get(`http://localhost:4000/products/${id}`);
-      console.log("product", res.data.product);
       setProduct(res.data.product);
     } catch (error) {
       console.log(error);
@@ -56,6 +56,45 @@ export const ShopContextProvider = ({ children }) => {
 
   const cartQty = () => cart.length;
 
+  const cartTotal = cart.reduce(
+    (acc, product) => acc + product.qty * product.price,0);
+
+  const addOrder = async (userValues) => {
+    const reducedCart = cart.map((product) => {
+      const prod = {
+        name: product.name,
+        _id: product._id,
+        qty: product.qty,
+      };
+
+      return prod;
+    });
+
+    const orderValues = {
+      user: userValues,
+      products: reducedCart,
+      total: cartTotal
+    };
+    console.log('my order is', orderValues);
+
+    try {
+      const response = await axios.post(
+        'http://localhost:4000/orders',
+        orderValues
+      );
+    
+
+      return true
+
+
+
+    } catch (error) {
+      console.log('error', error);
+
+      return false
+    }
+  };
+
   return (
     <ShopContext.Provider
       value={{
@@ -65,6 +104,8 @@ export const ShopContextProvider = ({ children }) => {
         products,
         product,
         getOneProduct,
+        addOrder,
+        cartTotal,
       }}
     >
       {children}
@@ -75,7 +116,7 @@ export const ShopContextProvider = ({ children }) => {
 export const useShopContext = () => {
   const context = useContext(ShopContext);
   if (!context) {
-    throw new Error("useShopContext must be used within a ShopContextProvider");
+    throw new Error('useShopContext must be used within a ShopContextProvider');
   }
   return context;
 };

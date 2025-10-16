@@ -5,5 +5,5 @@ const page = () => {
     <CheckoutContainer />
   )
 }
-
+ 
 export default page
