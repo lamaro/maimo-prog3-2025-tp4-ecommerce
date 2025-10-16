@@ -54,7 +54,7 @@ export const ShopContextProvider = ({ children }) => {
     getAllProducts();
   }, []);
 
-  const cartQty = () => cart.length; //comm
+  const cartQty = () => cart.length; //
 
   const cartTotal = cart.reduce(
     (acc, product) => acc + product.qty * product.price,0);
